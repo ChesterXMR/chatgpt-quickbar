@@ -1,0 +1,147 @@
+/* ChatGPT Quick Bar — styled to sit natively above ChatGPT's composer. */
+
+#cgqb-bar {
+  /* light theme (default) */
+  --cgqb-page-bg: #ffffff;
+  --cgqb-text: #5d5d5d;
+  --cgqb-text-strong: #0d0d0d;
+  --cgqb-track: #f3f3f3;
+  --cgqb-thumb: #ffffff;
+  --cgqb-thumb-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --cgqb-hover: rgba(0, 0, 0, 0.05);
+  --cgqb-ring: rgba(0, 0, 0, 0.1);
+  --cgqb-accent: #0285ff;
+  --cgqb-accent-bg: rgba(2, 133, 255, 0.1);
+  --cgqb-accent-hover: rgba(2, 133, 255, 0.16);
+
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 12px;
+  background: var(--cgqb-page-bg);
+  font-family: inherit;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* soft fade so the conversation scrolls away under the bar instead of butting into it */
+#cgqb-bar::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 20px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--cgqb-page-bg));
+}
+
+#cgqb-bar[data-theme="dark"] {
+  --cgqb-text: #afafaf;
+  --cgqb-text-strong: #ffffff;
+  --cgqb-track: #1b1b1b;
+  --cgqb-thumb: #303030;
+  --cgqb-thumb-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --cgqb-hover: rgba(255, 255, 255, 0.06);
+  --cgqb-ring: rgba(255, 255, 255, 0.12);
+  --cgqb-accent: #48aaff;
+  --cgqb-accent-bg: rgba(72, 170, 255, 0.14);
+  --cgqb-accent-hover: rgba(72, 170, 255, 0.2);
+}
+
+#cgqb-bar .cgqb-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+#cgqb-bar .cgqb-sep { display: none; }
+
+#cgqb-bar button {
+  all: unset;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--cgqb-text);
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+#cgqb-bar button svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+#cgqb-bar button:focus-visible {
+  outline: 2px solid var(--cgqb-accent);
+  outline-offset: 2px;
+}
+
+/* Effort: segmented control */
+#cgqb-bar .cgqb-effort {
+  padding: 3px;
+  gap: 2px;
+  border-radius: 9999px;
+  background: var(--cgqb-track);
+}
+
+#cgqb-bar .cgqb-effort button {
+  height: 28px;
+  min-width: 72px;
+  padding: 0 12px;
+}
+
+#cgqb-bar .cgqb-effort button:hover { background: transparent; color: var(--cgqb-text-strong); }
+
+#cgqb-bar .cgqb-effort button.cgqb-on {
+  background: var(--cgqb-thumb);
+  box-shadow: var(--cgqb-thumb-shadow);
+  color: var(--cgqb-text-strong);
+}
+
+/* Web / Image: tool pills */
+#cgqb-bar .cgqb-tools { gap: 6px; }
+
+#cgqb-bar .cgqb-tools button {
+  height: 34px;
+  padding: 0 14px 0 12px;
+  box-shadow: inset 0 0 0 1px var(--cgqb-ring);
+}
+
+#cgqb-bar .cgqb-tools button:hover {
+  background: var(--cgqb-hover);
+  color: var(--cgqb-text-strong);
+}
+
+#cgqb-bar .cgqb-tools button.cgqb-on {
+  background: var(--cgqb-accent-bg);
+  box-shadow: inset 0 0 0 1px transparent;
+  color: var(--cgqb-accent);
+}
+
+#cgqb-bar .cgqb-tools button.cgqb-on:hover { background: var(--cgqb-accent-hover); }
+
+#cgqb-bar.cgqb-busy button { pointer-events: none; }
+
+#cgqb-bar button.cgqb-unavailable { opacity: 0.35; cursor: not-allowed; }
+
+/* While the extension drives ChatGPT's own menus, keep them invisible so nothing flashes. */
+html.cgqb-driving [data-radix-popper-content-wrapper],
+html.cgqb-driving [data-composer-overlay-floating-ui] {
+  opacity: 0 !important;
+}
